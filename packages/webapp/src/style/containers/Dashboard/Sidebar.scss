@@ -147,6 +147,8 @@
       font-size: 15px;
       font-weight: 400;
       gap: 10px;
+      min-height: 36px;
+      position: relative;
 
       &:hover {
         background: var(--color-sidebar-menu-item-hover-background);
@@ -174,8 +176,12 @@
       >.#{$ns}-icon-caret-right {
         margin-right: -4px;
         margin-top: 3px;
-        color: rgba(255, 255, 255, 0.25);
+        color: rgba(255, 255, 255, 0.36);
         transition: transform 0.16s ease, color 0.16s ease;
+      }
+
+      &.sidebar-menu__item--has-children {
+        font-weight: 500;
       }
 
       &-labeler {
@@ -200,10 +206,16 @@
     }
 
     .#{$ns}-submenu {
+      position: relative;
+
       &.is-collapse-open {
         > .#{$ns}-menu-item {
+          background: rgba(255, 255, 255, 0.07);
+          color: var(--color-sidebar-menu-item-text-hover);
+          box-shadow: inset 3px 0 0 var(--color-primary);
+
           > .#{$ns}-icon-caret-right {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.72);
             transform: rotate(90deg);
           }
         }
@@ -211,24 +223,46 @@
 
       .#{$ns}-collapse {
         &-body {
-          background-color: rgba(255, 255, 255, 0.03);
-          padding-bottom: 6px;
-          padding-top: 6px;
+          background:
+            linear-gradient(
+              90deg,
+              rgba(255, 255, 255, 0.05),
+              rgba(255, 255, 255, 0.015)
+            );
+          border-left: 1px solid rgba(255, 255, 255, 0.2);
+          margin: 0 10px 8px 20px;
+          padding: 5px 0 6px;
         }
 
         .#{$ns}-menu-item {
-          padding: 8px 20px;
+          border-radius: 0 4px 4px 0;
+          margin: 1px 0;
+          padding: 7px 14px 7px 20px;
           font-size: 15px;
           color: $sidebar-submenu-item-color;
 
           &:hover,
           &.bp4-active {
-            background: transparent;
             color: $sidebar-submenu-item-hover-color;
           }
 
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+          }
+
           &.bp4-active {
+            background: rgba(255, 255, 255, 0.12);
             font-weight: 500;
+          }
+
+          &::before {
+            background: rgba(255, 255, 255, 0.2);
+            content: '';
+            height: 1px;
+            left: -1px;
+            position: absolute;
+            top: 50%;
+            width: 12px;
           }
         }
       }
@@ -251,11 +285,11 @@
       }
 
       &--level-1 {
-        padding-left: 28px;
+        padding-left: 24px;
       }
 
       &--level-2 {
-        padding-left: 40px;
+        padding-left: 36px;
         font-size: 14px;
 
         >.#{$ns}-icon {
@@ -266,12 +300,26 @@
 
       &--level-3,
       &--level-4 {
-        padding-left: 52px;
+        padding-left: 48px;
         font-size: 14px;
 
         >.#{$ns}-icon {
           color: rgba(255, 255, 255, 0.44);
           opacity: 1;
+        }
+      }
+
+      &--is-branch-active:not(.sidebar-menu__item--is-current) {
+        &.#{$ns}-active.#{$ns}-intent-primary {
+          background: rgba(255, 255, 255, 0.07);
+        }
+      }
+
+      &--is-current {
+        &.#{$ns}-active.#{$ns}-intent-primary {
+          background: rgba(255, 255, 255, 0.16);
+          box-shadow: inset 3px 0 0 var(--color-primary);
+          font-weight: 600;
         }
       }
     }

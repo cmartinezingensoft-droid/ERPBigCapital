@@ -37,7 +37,15 @@ function SidebarMenuItem({ item, index, level, pathname, children }) {
   return (
     <MenuItem
       key={index}
-      className={`sidebar-menu__item sidebar-menu__item--level-${level}`}
+      className={[
+        'sidebar-menu__item',
+        `sidebar-menu__item--level-${level}`,
+        hasChildren ? 'sidebar-menu__item--has-children' : '',
+        isActive ? 'sidebar-menu__item--is-current' : '',
+        isBranchActive ? 'sidebar-menu__item--is-branch-active' : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
       style={
         item.iconColor
           ? { '--sidebar-menu-icon-color': item.iconColor }
