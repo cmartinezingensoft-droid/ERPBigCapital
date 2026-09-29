@@ -15,4 +15,12 @@ La interfaz está configurada por defecto en castellano. La identidad visual uti
 
 ## Licencia
 
-Consulta la pantalla **Preferencias → Acerca de FaroCapital** y el archivo `LICENSE` incluido con las fuentes.
+FaroCapital es una obra modificada basada en Bigcapital:
+
+- Proyecto original: https://github.com/bigcapitalhq/bigcapital
+- Licencia del proyecto original: GNU Affero General Public License v3 (AGPLv3)
+- Licencia de esta distribución: GNU Affero General Public License v3 o, cuando el titular correspondiente lo permita, cualquier versión posterior
+
+El texto completo de la licencia se incluye en `LICENSE`. Los avisos de origen, cambios y atribución se incluyen en `NOTICE`.
+
+Si ejecutas una versión modificada de FaroCapital para usuarios a través de una red, la AGPL exige ofrecer a esos usuarios el código fuente correspondiente de la versión que están usando, sin coste, mediante un medio estándar o habitual.

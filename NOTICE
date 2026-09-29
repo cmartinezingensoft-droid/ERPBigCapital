@@ -1,0 +1,32 @@
+FaroCapital
+===========
+
+FaroCapital is a modified work based on Bigcapital, an open-source accounting
+and inventory project published by Bigcapital Technologies under the GNU Affero
+General Public License version 3.
+
+Upstream project:
+https://github.com/bigcapitalhq/bigcapital
+
+This distribution contains changes made for FaroCapital, including Spanish
+localisation, branding changes, fiscal/compliance adaptations, VERI*FACTU and
+SEPA-related functionality, packaging scripts, and project documentation.
+
+License:
+The covered work as a whole is distributed under the GNU Affero General Public
+License version 3 or, where permitted by the relevant copyright holder, any
+later version. The full license text is provided in the LICENSE file.
+
+AGPL network-source notice:
+If you run a modified version of this software for users over a computer
+network, you must offer those users access to the Corresponding Source of the
+version they are using, at no charge, through a standard or customary means.
+
+Copyright notices:
+Copyright remains with the original Bigcapital contributors for upstream
+materials. Copyright in FaroCapital modifications belongs to their respective
+authors and contributors.
+
+Third-party notices:
+Third-party components keep their own licenses and notices where included in
+the source tree, dependency metadata, or documentation.

@@ -21,7 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@rollup/rollup-darwin-arm64": "^4.59.0",
     "openapi-typescript-fetch": "^2.2.1"

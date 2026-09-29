@@ -16,12 +16,13 @@ export function AboutPage() {
         <H4>Software libre y licencia</H4>
         <p>
           FaroCapital se basa en el proyecto de software libre BigCapital y se distribuye
-          conforme a la GNU Affero General Public License v3 (AGPLv3), incluyendo las
-          modificaciones realizadas en esta versión.
+          conforme a la GNU Affero General Public License v3 o posterior (AGPLv3+),
+          incluyendo las modificaciones realizadas en esta versión.
         </p>
         <p>
-          El texto completo de la licencia se incluye en el archivo <strong>LICENSE</strong>
-          de las fuentes. El proyecto original puede consultarse en{' '}
+          El texto completo de la licencia se incluye en el archivo <strong>LICENSE</strong>.
+          Los avisos de origen y cambios se incluyen en <strong>NOTICE</strong>. El proyecto
+          original puede consultarse en{' '}
           <a
             href="https://github.com/bigcapitalhq/bigcapital"
             target="_blank"
@@ -29,6 +30,11 @@ export function AboutPage() {
           >
             su repositorio público
           </a>.
+        </p>
+        <p>
+          Si esta instalación se ofrece a usuarios por red, esos usuarios deben poder
+          acceder al código fuente correspondiente de la versión que están usando, sin
+          coste, por un medio estándar o habitual.
         </p>
       </Card>
     </div>
