@@ -1,0 +1,44 @@
+import React from 'react';
+import { Dialog, DialogSuspense } from '@/components';
+import withDialogRedux from '@/components/DialogReduxConnect';
+import { compose } from '@/utils';
+
+const ExcessPaymentDialogContent = React.lazy(() =>
+  import('./ExcessPaymentDialogContent').then((module) => ({
+    default: module.ExcessPaymentDialogContent,
+  })),
+);
+
+type ExcessPaymentDialogRootProps = {
+  dialogName: string;
+  isOpen?: boolean;
+};
+
+/**
+ * Excess payment dialog of the payment received form.
+ */
+function ExcessPaymentDialogRoot({
+  dialogName,
+  isOpen,
+}: ExcessPaymentDialogRootProps) {
+  return (
+    <Dialog
+      name={dialogName}
+      title={'Pago excedente'}
+      isOpen={isOpen}
+      canEscapeJeyClose={true}
+      autoFocus={true}
+      style={{ width: 500 }}
+    >
+      <DialogSuspense>
+        <ExcessPaymentDialogContent dialogName={dialogName} />
+      </DialogSuspense>
+    </Dialog>
+  );
+}
+
+export const ExcessPaymentDialog = compose(withDialogRedux())(
+  ExcessPaymentDialogRoot,
+);
+
+ExcessPaymentDialog.displayName = 'ExcessPaymentDialog';

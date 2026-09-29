@@ -1,0 +1,51 @@
+import { TransactionsByCustomersTableQuery } from '@farocapital/sdk-ts';
+import { castArray } from 'lodash';
+import moment from 'moment';
+import { useMemo } from 'react';
+import intl from 'react-intl-universal';
+import * as Yup from 'yup';
+import { useAppQueryString } from '@/hooks';
+import { transformToForm } from '@/utils';
+
+export const getCustomersTransactionsQuerySchema = () => {
+  return Yup.object().shape({
+    fromFecha: Yup.date().required().label(intl.get('fromDate')),
+    toFecha: Yup.date()
+      .min(Yup.ref('fromDate'))
+      .required()
+      .label(intl.get('toDate')),
+  });
+};
+
+export const getCustomersTransactionsDefaultQuery = () => ({
+  fromFecha: moment().startOf('month').format('YYYY-MM-DD'),
+  toFecha: moment().format('YYYY-MM-DD'),
+  customersIds: [] as string[],
+  filterByOption: 'with-transactions',
+  numberFormat: {},
+});
+
+const parseCustomersTransactionsQuery = (
+  query: Record<string, any>,
+): TransactionsByCustomersTableQuery => {
+  const defaultQuery = getCustomersTransactionsDefaultQuery();
+
+  const transformedQuery = {
+    ...defaultQuery,
+    ...transformToForm(query, defaultQuery),
+  };
+  return {
+    ...transformedQuery,
+    customersIds: castArray(transformedQuery.customersIds).map(Number),
+  };
+};
+
+export const useCustomersTransactionsQuery = () => {
+  const [locationQuery, setLocationQuery] = useAppQueryString();
+
+  const query = useMemo(
+    () => parseCustomersTransactionsQuery(locationQuery),
+    [locationQuery],
+  );
+  return [query, setLocationQuery] as const;
+};

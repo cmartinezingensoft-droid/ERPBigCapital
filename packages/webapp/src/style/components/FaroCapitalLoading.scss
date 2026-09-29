@@ -1,0 +1,17 @@
+.farocapital-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 72px;
+
+  img {
+    display: block;
+    animation: farocapital-pulse 1.1s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes farocapital-pulse {
+  from { opacity: 0.45; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}

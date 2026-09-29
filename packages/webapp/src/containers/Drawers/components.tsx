@@ -1,0 +1,59 @@
+// @ts-nocheck
+import moment from 'moment';
+import React from 'react';
+import { If, Money } from '@/components';
+import { FaroCapitalBrand } from '@/components/FaroCapitalBrand';
+
+export const TemplateHeader = ({ defaultLabels }) => (
+  <div className={'template__header'}>
+    <div className={'template__header--title'}>
+      <h1>{defaultLabels.name}</h1>
+      <p>soporte@farocapital.local </p>
+    </div>
+    <FaroCapitalBrand size={32} />
+  </div>
+);
+
+export const TemplateContent = ({
+  defaultLabels,
+  billedTo,
+  date,
+  referenceNo,
+  amount,
+  billedFrom,
+  dueDate,
+  currencyCode,
+}) => (
+  <div className="template__content">
+    <div className="template__content__info">
+      <span> {defaultLabels.billedTo} </span>
+      <p className={'info-paragraph'}>{billedTo}</p>
+    </div>
+    <div className="template__content__info">
+      <span> {defaultLabels.date} </span>
+      <p className={'info-paragraph'}>{moment(date).format('YYYY MMM DD')}</p>
+    </div>
+    <div className="template__content__info">
+      <span> {defaultLabels.refNo} </span>
+      <p className={'info-paragraph'}>{referenceNo}</p>
+    </div>
+    <div className="template__content__info">
+      <span> {defaultLabels.amount} </span>
+      <p className={'info-paragraph-amount'}>
+        {<Money amount={amount} currency={currencyCode} />}
+      </p>
+    </div>
+    <div className="template__content__info">
+      <span> {defaultLabels.billedFrom} </span>
+      <p className={'info-paragraph'}>{billedFrom}</p>
+    </div>
+    <div className="template__content__info">
+      <If condition={dueDate}>
+        <span> {defaultLabels.dueDate} </span>
+        <p className={'info-paragraph'}>
+          {moment(dueDate).format('YYYY MMM DD')}
+        </p>
+      </If>
+    </div>
+  </div>
+);

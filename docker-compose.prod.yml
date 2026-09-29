@@ -1,0 +1,240 @@
+# This is a production version of the FaroCapital docker-compose.yml file.
+
+version: '3.3'
+
+services:
+  proxy:
+    image: ${ENVOY_IMAGE:-envoyproxy/envoy:v1.30.2}
+    depends_on:
+      - server
+      - webapp
+    ports:
+      - '${PUBLIC_PROXY_PORT:-80}:80'
+    tty: true
+    volumes:
+      - ./docker/envoy/envoy.yaml:/etc/envoy/envoy.yaml
+    restart: on-failure
+    networks:
+      - farocapital_network
+
+  webapp:
+    container_name: farocapital-webapp
+    image: ${FAROCAPITAL_WEBAPP_IMAGE:?Set FAROCAPITAL_WEBAPP_IMAGE to an immutable release tag or digest}
+    restart: on-failure
+    networks:
+      - farocapital_network
+
+  server:
+    container_name: farocapital-server
+    image: ${FAROCAPITAL_SERVER_IMAGE:?Set FAROCAPITAL_SERVER_IMAGE to an immutable release tag or digest}
+    expose:
+      - '3000'
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - redis
+      - garage
+    restart: on-failure
+    networks:
+      - farocapital_network
+    environment:
+      # Mail
+      - MAIL_HOST=${MAIL_HOST}
+      - MAIL_USERNAME=${MAIL_USERNAME}
+      - MAIL_PASSWORD=${MAIL_PASSWORD}
+      - MAIL_PORT=${MAIL_PORT}
+      - MAIL_SECURE=${MAIL_SECURE}
+      - MAIL_FROM_NAME=${MAIL_FROM_NAME}
+      - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+
+      # Database
+      - DB_HOST=mysql
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CHARSET=${DB_CHARSET}
+
+      # System database
+      - SYSTEM_DB_NAME=${SYSTEM_DB_NAME}
+
+      # Redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUEUE_HOST=redis
+      - QUEUE_PORT=6379
+
+      # Tenants databases
+      - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX}
+
+      # Authentication
+      - JWT_SECRET=${JWT_SECRET}
+
+      # VERI*FACTU (Spain)
+      - VERIFACTU_ENABLED=${VERIFACTU_ENABLED:-false}
+      - VERIFACTU_ENVIRONMENT=${VERIFACTU_ENVIRONMENT:-test}
+      - VERIFACTU_ENDPOINT=${VERIFACTU_ENDPOINT}
+      - VERIFACTU_QR_ENDPOINT=${VERIFACTU_QR_ENDPOINT}
+      - VERIFACTU_CERTIFICATE_PATH=${VERIFACTU_CERTIFICATE_PATH}
+      - VERIFACTU_CERTIFICATE_PASSPHRASE=${VERIFACTU_CERTIFICATE_PASSPHRASE}
+      - VERIFACTU_PRODUCER_NAME=${VERIFACTU_PRODUCER_NAME:-FaroCapital}
+      - VERIFACTU_PRODUCER_TAX_NUMBER=${VERIFACTU_PRODUCER_TAX_NUMBER}
+      - VERIFACTU_SYSTEM_NAME=${VERIFACTU_SYSTEM_NAME:-FaroCapital}
+      - VERIFACTU_SYSTEM_ID=${VERIFACTU_SYSTEM_ID:-BC}
+      - VERIFACTU_SYSTEM_VERSION=${VERIFACTU_SYSTEM_VERSION:-1.0.0}
+      - VERIFACTU_INSTALLATION_NUMBER=${VERIFACTU_INSTALLATION_NUMBER:-1}
+      - VERIFACTU_REQUEST_TIMEOUT_MS=${VERIFACTU_REQUEST_TIMEOUT_MS:-30000}
+      - VERIFACTU_DEFAULT_WAIT_SECONDS=${VERIFACTU_DEFAULT_WAIT_SECONDS:-60}
+      - VERIFACTU_MAX_ATTEMPTS=${VERIFACTU_MAX_ATTEMPTS:-12}
+
+      # Application
+      - BASE_URL=${BASE_URL}
+
+      # Sign-up restrictions
+      - SIGNUP_DISABLED=${SIGNUP_DISABLED}
+      - SIGNUP_ALLOWED_DOMAINS=${SIGNUP_ALLOWED_DOMAINS}
+      - SIGNUP_ALLOWED_EMAILS=${SIGNUP_ALLOWED_EMAILS}
+
+      # Sign-up email confirmation
+      - SIGNUP_EMAIL_CONFIRMATION=${SIGNUP_EMAIL_CONFIRMATION}
+
+      # Gotenberg (Pdf generator)
+      - GOTENBERG_URL=${GOTENBERG_URL}
+      - GOTENBERG_DOCS_URL=${GOTENBERG_DOCS_URL}
+
+      # Exchange Rate
+      - EXCHANGE_RATE_SERVICE=${EXCHANGE_RATE_SERVICE}
+      - OPEN_EXCHANGE_RATE_APP_ID-${OPEN_EXCHANGE_RATE_APP_ID}
+
+      # Bank Sync
+      - BANK_FEED_ENABLED=${BANK_FEED_ENABLED}
+
+      # Plaid
+      - PLAID_ENV=${PLAID_ENV}
+      - PLAID_CLIENT_ID=${PLAID_CLIENT_ID}
+      - PLAID_SECRET=${PLAID_SECRET}
+      - PLAID_LINK_WEBHOOK=${PLAID_LINK_WEBHOOK}
+
+      # Lemon Squeez
+      - LEMONSQUEEZY_API_KEY=${LEMONSQUEEZY_API_KEY}
+      - LEMONSQUEEZY_STORE_ID=${LEMONSQUEEZY_STORE_ID}
+      - LEMONSQUEEZY_WEBHOOK_SECRET=${LEMONSQUEEZY_WEBHOOK_SECRET}
+      - HOSTED_ON_FAROCAPITAL_CLOUD=${HOSTED_ON_FAROCAPITAL_CLOUD}
+
+      # New Relic matrics tracking.
+      - NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=${NEW_RELIC_DISTRIBUTED_TRACING_ENABLED}
+      - NEW_RELIC_LOG=${NEW_RELIC_LOG}
+      - NEW_RELIC_AI_MONITORING_ENABLED=${NEW_RELIC_AI_MONITORING_ENABLED}
+      - NEW_RELIC_CUSTOM_INSIGHTS_EVENTS_MAX_SAMPLES_STORED=${NEW_RELIC_CUSTOM_INSIGHTS_EVENTS_MAX_SAMPLES_STORED}
+      - NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED=${NEW_RELIC_SPAN_EVENTS_MAX_SAMPLES_STORED}
+      - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE_KEY}
+      - NEW_RELIC_APP_NAME=${NEW_RELIC_APP_NAME}
+
+      # S3
+      - S3_REGION=${S3_REGION}
+      - S3_ACCESS_KEY_ID=${S3_ACCESS_KEY_ID}
+      - S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
+
+      # Stripe
+      - STRIPE_PAYMENT_SECRET_KEY=${STRIPE_PAYMENT_SECRET_KEY}
+      - STRIPE_PAYMENT_PUBLISHABLE_KEY=${STRIPE_PAYMENT_PUBLISHABLE_KEY}
+      - STRIPE_PAYMENT_CLIENT_ID=${STRIPE_PAYMENT_CLIENT_ID}
+      - STRIPE_PAYMENT_WEBHOOKS_SECRET=${STRIPE_PAYMENT_WEBHOOKS_SECRET}
+      - STRIPE_PAYMENT_REDIRECT_URL=${STRIPE_PAYMENT_REDIRECT_URL}
+
+  database_migration:
+    container_name: farocapital-database-migration
+    build:
+      context: ./
+      dockerfile: docker/migration/Dockerfile
+      args:
+        FAROCAPITAL_SERVER_IMAGE: ${FAROCAPITAL_SERVER_IMAGE:?Set FAROCAPITAL_SERVER_IMAGE to the same immutable image used by server}
+    environment:
+      # Database
+      - DB_HOST=mysql
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_CHARSET=${DB_CHARSET}
+      - SYSTEM_DB_NAME=${SYSTEM_DB_NAME}
+      # Tenants databases
+      - TENANT_DB_NAME_PERFIX=${TENANT_DB_NAME_PERFIX}
+    depends_on:
+      - mysql
+    networks:
+      - farocapital_network
+
+  mysql:
+    container_name: farocapital-mysql
+    restart: on-failure
+    build:
+      context: ./docker/mariadb
+    environment:
+      - MYSQL_DATABASE=${SYSTEM_DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    volumes:
+      - mysql:/var/lib/mysql
+    expose:
+      - '3306'
+    networks:
+      - farocapital_network
+
+  redis:
+    container_name: farocapital-redis
+    restart: on-failure
+    build:
+      context: ./docker/redis
+    expose:
+      - '6379'
+    volumes:
+      - redis:/data
+    networks:
+      - farocapital_network
+
+  gotenberg:
+    image: gotenberg/gotenberg:7
+    expose:
+      - '9000'
+    networks:
+      - farocapital_network
+
+  garage:
+    container_name: farocapital-garage
+    image: dxflrs/garage:v1.3.1
+    restart: on-failure
+    environment:
+      - GARAGE_CONFIG_FILE=/etc/garage.toml
+      - GARAGE_RPC_SECRET=${GARAGE_RPC_SECRET}
+      - GARAGE_ADMIN_TOKEN=${GARAGE_ADMIN_TOKEN}
+    volumes:
+      - ./docker/garage/garage.toml:/etc/garage.toml
+      - ./docker/garage/setup.sh:/garage-setup/setup.sh
+      - garage:/var/lib/garage
+    expose:
+      - '3900'
+      - '3903'
+    networks:
+      - farocapital_network
+
+# Volumes
+volumes:
+  mysql:
+    name: farocapital_prod_mysql
+    driver: local
+
+  redis:
+    name: farocapital_prod_redis
+    driver: local
+
+  garage:
+    name: farocapital_prod_garage
+    driver: local
+
+# Networks
+networks:
+  farocapital_network:
+    driver: bridge

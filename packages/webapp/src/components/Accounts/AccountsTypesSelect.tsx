@@ -1,0 +1,51 @@
+import React from 'react';
+import { MenuItem } from '@blueprintjs/core';
+import type { ItemRendererProps } from '@blueprintjs/select';
+import type { AccountTypesList } from '@farocapital/sdk-ts';
+import { FSelect } from '@/components/Forms';
+
+type FSelectProps = React.ComponentProps<typeof FSelect>;
+type AccountType = AccountTypesList[number];
+
+interface AccountsTypesSelectProps extends Omit<FSelectProps, 'items'> {
+  items: AccountTypesList;
+}
+
+/**
+ * Renders an account type option in the select popover.
+ */
+function AccountTypeItemRenderer(
+  item: AccountType,
+  { handleClick, modifiers }: ItemRendererProps,
+) {
+  if (!modifiers.matchesPredicate) {
+    return null;
+  }
+  return (
+    <MenuItem
+      active={modifiers.active}
+      disabled={modifiers.disabled}
+      label={item.label}
+      key={item.key}
+      text={item.label}
+      onClick={handleClick}
+      data-testId={'account-type-option'}
+    />
+  );
+}
+
+export function AccountsTypesSelect({
+  ...props
+}: AccountsTypesSelectProps): React.ReactElement {
+  return (
+    <FSelect<AccountType>
+      valueAccessor={'key'}
+      labelAccessor={'label'}
+      textAccessor={'label'}
+      placeholder={'Selecciona una cuenta...'}
+      buttonProps={{ 'data-testId': 'account-type-select' }}
+      itemRenderer={AccountTypeItemRenderer}
+      {...props}
+    />
+  );
+}

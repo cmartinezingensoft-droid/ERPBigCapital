@@ -1,0 +1,15 @@
+export const defaultPaymentReceiptMailProps = {
+  companyName: 'Company Name',
+  companyLogoUri: 'https://via.placeholder.com/150',
+  primaryColor: 'rgb(243, 113, 33)',
+  paymentFecha: '2021-01-01',
+  paymentDateLabel: 'Payment Date',
+  total: '100.00',
+  totalLabel: 'Total',
+  paymentNumber: '123456',
+  paymentNumberLabel: 'Payment #',
+  message: '¡Gracias por tu pago!',
+  subtotal: '100.00',
+  subtotalLabel: 'Subtotal',
+  items: [{ label: 'Factura 1', total: '100.00' }],
+};

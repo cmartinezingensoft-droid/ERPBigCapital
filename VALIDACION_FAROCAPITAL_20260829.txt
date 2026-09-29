@@ -1,0 +1,28 @@
+FaroCapital - validación de fuentes - 2026-08-29
+================================================
+
+Cambios finalizados:
+- Interfaz predeterminada y textos directos revisados en castellano.
+- Marca BigCapital sustituida por FaroCapital en código, paquetes y configuración.
+- Logotipo FaroCapital aplicado a interfaz, carga, recursos públicos y recursos del servidor.
+- Color primario actualizado al naranja corporativo #F37121 y sustituidos los azules principales heredados.
+- Llamadas/referencias específicas al proyecto BigCapital eliminadas del código y configuración de ejecución.
+- La referencia a BigCapital se conserva exclusivamente en Preferencias > Acerca de FaroCapital para procedencia/licencia.
+- LICENSE AGPLv3 conservada sin modificaciones.
+- Workflows heredados de publicación adaptados al repositorio actual mediante GitHub Container Registry.
+
+Comprobaciones realizadas:
+- TypeScript/TSX analizados: 5.656; errores de sintaxis: 0.
+- QA España Fase 10: PASS; 2.383 claves EN / 2.452 claves ES; 0 claves EN sin cobertura ES.
+- 7 package.json analizados; referencias internas @farocapital/* coherentes.
+- JSON principal, manifest y locale ES: válidos.
+- setup.sh: sintaxis Bash válida.
+- YAML de publicación: válido.
+- Referencias textuales BigCapital fuera de Acerca de: 0.
+- Namespace @bigcapital/*: 0.
+- Nombres de archivo/directorio con BigCapital: 0.
+- Hash LICENSE original: 6222fdf64728d91bef797fae1c610f97737df67fd07026b7a83d661252fdade6
+- Hash LICENSE actual:   6222fdf64728d91bef797fae1c610f97737df67fd07026b7a83d661252fdade6
+
+Nota de compilación:
+El paquete entregado contiene las fuentes finalizadas. No se ejecutó un build completo del monorepo porque este entorno no dispone de las dependencias node_modules/pnpm instaladas y no tiene acceso de red para resolverlas. Se realizaron las validaciones estáticas anteriores para cerrar el paquete de fuentes.
